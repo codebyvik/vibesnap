@@ -1,10 +1,16 @@
 import { put, call, take } from "redux-saga/effects";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../configs/firebase";
-import { loginFailure, loginSuccess, resetAuthState } from "../../redux/auth.redux";
+import {
+  loginFailure,
+  loginSuccess,
+  resetAuthState,
+  signOutUserSuccess,
+} from "../../redux/auth.redux";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { SagaIterator, eventChannel } from "redux-saga";
+import { setLocalStorageItem } from "@/utils/localstorage";
 
 export function* LoginSaga(): SagaIterator {
   try {
@@ -24,9 +30,7 @@ export function* LoginSaga(): SagaIterator {
 
     yield call(() => setDoc(userDocRef, userData));
 
-    console.log({ response });
-
-    console.log("Google Login Success:", user);
+    setLocalStorageItem("welcomeMessageShowed", false);
 
     yield put(loginSuccess(userData));
   } catch (error) {
@@ -67,5 +71,15 @@ export function* fetchUserSaga(): SagaIterator {
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
+  }
+}
+
+export function* signOutSaga(): SagaIterator {
+  try {
+    yield call(signOut, auth);
+    localStorage.clear();
+    yield put(signOutUserSuccess());
+  } catch (error) {
+    console.error("Error signing out :", error);
   }
 }

@@ -1,0 +1,31 @@
+.welcome-message {
+    transform: translateY(-100px);
+    display: none;
+    position: absolute;
+    top: 0;
+}
+
+@keyframes slideInSLideOut {
+    0% {
+        transform: translateY(-100px);
+
+    }
+
+    20% {
+        transform: translateY(00px);
+    }
+
+    80% {
+        transform: translateY(00px);
+    }
+
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+.slideInSlideOut {
+    display: flex;
+    animation-name: slideInSLideOut;
+    animation-duration: 4s;
+}

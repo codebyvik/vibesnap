@@ -29,12 +29,26 @@ export const authRedux = createSlice({
     fetchUserData: (state) => {
       state.user.isfetching = true;
     },
+    signOutUser: (state) => {
+      state.user.isLoading = true;
+    },
+    signOutUserSuccess: (state) => {
+      state.user.isLoading = false;
+      state.user.userDetails = null;
+    },
 
     resetAuthState: () => initialAuthState,
   },
 });
 
-export const { loginUser, loginSuccess, loginFailure, fetchUserData, resetAuthState } =
-  authRedux.actions;
+export const {
+  loginUser,
+  loginSuccess,
+  loginFailure,
+  fetchUserData,
+  resetAuthState,
+  signOutUser,
+  signOutUserSuccess,
+} = authRedux.actions;
 
 export default authRedux.reducer;

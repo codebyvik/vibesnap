@@ -1,12 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { routeNames } from "./routes";
+import { useSelector } from "react-redux";
+import Layout from "@/layout/layout";
 
 export const ProtectedRoutes = () => {
-  const authToken = true;
+  const { userDetails } = useSelector((state: any) => state?.auth?.user);
 
-  if (!authToken) {
+  if (!userDetails?.name) {
     return <Navigate to={routeNames.loginPage} />;
   }
 
-  return <Outlet />;
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
 };
