@@ -6,6 +6,7 @@ import {
   loginFailure,
   loginSuccess,
   resetAuthState,
+  signOutUser,
   signOutUserSuccess,
 } from "../../redux/auth.redux";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -29,7 +30,8 @@ export function* LoginSaga(): SagaIterator {
 
     yield call(() => setDoc(userDocRef, userData));
 
-    setLocalStorageItem("welcomeMessageShowed", false);
+    yield call(() => setLocalStorageItem("welcomeMessageShowed", false));
+    yield call(() => setLocalStorageItem("signedIn", true));
 
     yield put(loginSuccess(userData));
   } catch (error) {
@@ -69,6 +71,7 @@ export function* fetchUserSaga(): SagaIterator {
       yield put(resetAuthState());
     }
   } catch (error) {
+    yield put(signOutUser());
     console.error("Error fetching user data:", error);
   }
 }
@@ -78,6 +81,7 @@ export function* signOutSaga(): SagaIterator {
     yield call(signOut, auth);
     localStorage.clear();
     yield put(signOutUserSuccess());
+    window.location.reload();
   } catch (error) {
     console.error("Error signing out :", error);
   }

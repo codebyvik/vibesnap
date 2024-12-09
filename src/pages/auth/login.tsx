@@ -6,22 +6,26 @@ import Logo from "../../assets/icons/vibesnap-logo.svg";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { routeNames } from "../../routes/routes";
+import { getLocalStorageItem } from "@/utils/localstorage";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userDetails } = useSelector((state: any) => state.auth.user);
+  const { success } = useSelector((state: any) => state.auth.user);
 
   const handleGoogleLogin = () => {
     dispatch(loginUser());
   };
 
   useEffect(() => {
-    if (userDetails) {
+    const signedIn = getLocalStorageItem("signedIn");
+    console.log({ signedIn });
+
+    if (signedIn) {
       navigate(routeNames.homePage);
     }
-  }, [navigate, userDetails]);
+  }, [success]);
 
   return (
     <div className="flex justify-center items-center h-screen w-full ">

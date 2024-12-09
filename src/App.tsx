@@ -5,6 +5,7 @@ import AppRoutes from "./routes";
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);

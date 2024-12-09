@@ -6,6 +6,7 @@ const initialAuthState = {
     isfetching: false,
     userDetails: null,
     error: null,
+    success: false,
   },
 };
 
@@ -20,6 +21,7 @@ export const authRedux = createSlice({
       state.user.isLoading = false;
       state.user.isfetching = false;
       state.user.userDetails = action?.payload;
+      state.user.success = true;
     },
     loginFailure: (state, action) => {
       state.user.isLoading = false;

@@ -1,12 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { routeNames } from "./routes";
-import { useSelector } from "react-redux";
+
 import Layout from "@/layout/layout";
+import { getLocalStorageItem } from "@/utils/localstorage";
 
 export const ProtectedRoutes = () => {
-  const { userDetails } = useSelector((state: any) => state?.auth?.user);
+  const signedIn = getLocalStorageItem("signedIn");
 
-  if (!userDetails?.name) {
+  if (!signedIn) {
     return <Navigate to={routeNames.loginPage} />;
   }
 

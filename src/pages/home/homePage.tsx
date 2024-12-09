@@ -21,7 +21,7 @@ const HomePage = () => {
       setTimeout(() => {
         setLocalStorageItem("welcomeMessageShowed", true);
         setShowMessage(false);
-      }, 4000);
+      }, 2000);
     }
   }, [showMessageStatus]);
 
@@ -33,21 +33,19 @@ const HomePage = () => {
     <>
       {/* Welcome animation */}
       <div
-        className={`flex gap-2 p-[16px] items-center welcome-message bg-white ${
+        className={`w-full flex gap-2 p-[16px] items-center welcome-message bg-white ${
           showMessage ? "slideInSlideOut" : ""
         }`}
       >
-        <>
-          <Avatar>
-            <AvatarImage src={`${userDetails?.profilePicture}`} />
-            <AvatarFallback>{userDetails?.name?.charAt(0)}</AvatarFallback>
-          </Avatar>
+        <Avatar>
+          <AvatarImage src={`${userDetails?.profilePicture}`} />
+          <AvatarFallback>{userDetails?.name?.charAt(0)}</AvatarFallback>
+        </Avatar>
 
-          <div>
-            <p className="opacity-30 text-[16px]">Welcome Back</p>
-            <p className="text-[16px] font-[600]">{userDetails?.name}</p>
-          </div>
-        </>
+        <div>
+          <p className="opacity-30 text-[16px]">Welcome Back</p>
+          <p className="text-[16px] font-[600]">{userDetails?.name}</p>
+        </div>
       </div>
       <div>
         <h4 className="text-lg font-bold">Feeds</h4>
