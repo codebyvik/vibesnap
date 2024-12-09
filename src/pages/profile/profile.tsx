@@ -61,7 +61,7 @@ const Profile = () => {
       <div className="mt-2 px-2 ">
         <h5 className="font-[600] text-[18px]">My Posts</h5>
 
-        <div className="md:h-[400px] h-[300px] overflow-scroll">
+        <div className="md:h-[400px] h-[400px] overflow-scroll">
           <div
             className="grid grid-cols-2 gap-2 md:gap-4  p-4"
             style={{
@@ -72,7 +72,7 @@ const Profile = () => {
               <div
                 key={post?.id}
                 className={`relative overflow-hidden rounded-lg shadow-lg group ${
-                  index % 3 === 0 ? "row-span-2 md:h-[300px] h-[200px]" : "h-[150px] md:h-[200px]"
+                  index % 3 === 0 ? "row-span-2 h-[400px] " : "h-[200px]"
                 }`}
               >
                 {post?.files?.[0]?.mediaType === "image" ? (
