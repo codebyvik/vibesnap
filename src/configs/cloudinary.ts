@@ -1,0 +1,7 @@
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_UPLOAD_URL = import.meta.env.VITE_CLOUDINARY_UPLOAD_URL;
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+export const cloudName = CLOUDINARY_CLOUD_NAME;
+export const uploadUrl = CLOUDINARY_UPLOAD_URL;
+export const uploadPreset = CLOUDINARY_UPLOAD_PRESET;

@@ -1,8 +1,16 @@
 import CustomFileCarousel from "@/components/carousel/customImageCarousel";
 import { Textarea } from "@/components/ui/textarea";
+import { uploadPreset, uploadUrl } from "@/configs/cloudinary";
 import { createPost } from "@/redux/post.redux";
+import axios, { AxiosResponse } from "axios";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+interface IuploadedFiles {
+  public_id: string | number;
+  public_url: string;
+  mediaType: string;
+}
 
 const NewPost = () => {
   const dispatch = useDispatch();
@@ -52,15 +60,43 @@ const NewPost = () => {
     }
   };
 
-  const handleCreatePosts = () => {
+  const handleCreatePosts = async () => {
     const filteredFiles = files?.map((item: any) => item?.file);
-    const data = {
-      uid: userDetails?.uid,
-      files: filteredFiles,
-      text,
-    };
 
-    dispatch(createPost(data));
+    const uploadedFiles: IuploadedFiles[] = [];
+
+    try {
+      for (const file of filteredFiles) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", uploadPreset);
+        formData.append("folder", "posts");
+
+        const response: AxiosResponse = await axios.post(`${uploadUrl}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        console.log("cloud", { response });
+
+        const mediaType = file?.type.startsWith("image/") ? "image" : "video";
+
+        uploadedFiles.push({
+          public_id: response.data.public_id,
+          public_url: response.data.url,
+          mediaType,
+        });
+      }
+
+      const data = {
+        uid: userDetails?.uid,
+        files: uploadedFiles,
+        text,
+      };
+
+      dispatch(createPost(data));
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (
