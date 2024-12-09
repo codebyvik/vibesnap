@@ -1,4 +1,5 @@
 import CustomFileCarousel from "@/components/carousel/customImageCarousel";
+import PageHeader from "@/components/shared/pageHeader/pageHeader";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadPreset, uploadUrl } from "@/configs/cloudinary";
 import { createPost } from "@/redux/post.redux";
@@ -91,6 +92,7 @@ const NewPost = () => {
         uid: userDetails?.uid,
         files: uploadedFiles,
         text,
+        likes: [],
       };
 
       dispatch(createPost(data));
@@ -100,8 +102,9 @@ const NewPost = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
-      <div className="w-full">
+    <div className="w-full h-full flex flex-col justify-between ">
+      <PageHeader label={"Profile"} color="black" />
+      <div className="w-full mt-[60px]">
         <input
           ref={fileInputRef}
           type="file"

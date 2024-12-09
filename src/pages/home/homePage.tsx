@@ -8,6 +8,7 @@ import "./homepage.style.css";
 import { signOutUser } from "@/redux/auth.redux";
 import { useNavigate } from "react-router-dom";
 import { routeNames } from "@/routes/routes";
+import Navbar from "@/layout/navbar";
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Navbar />
       {/* Welcome animation */}
       <div
         className={`w-full flex gap-2 p-[16px] items-center welcome-message bg-white ${
@@ -47,19 +49,21 @@ const HomePage = () => {
           <p className="text-[16px] font-[600]">{userDetails?.name}</p>
         </div>
       </div>
-      <div>
-        <h4 className="text-lg font-bold">Feeds</h4>
-      </div>
+      <div className="h-[calc(100vh-50px)] px-2 pb-1">
+        <div>
+          <h4 className="text-lg font-bold">Feeds</h4>
+        </div>
 
-      <button onClick={() => dispatch(signOutUser())}>signout</button>
+        <button onClick={() => dispatch(signOutUser())}>signout</button>
 
-      {/* Floating add post button */}
+        {/* Floating add post button */}
 
-      <div
-        onClick={handleNewPostClick}
-        className="absolute bottom-10 right-10 h-[40px] w-[40px] rounded-full flex justify-center items-center bg-black cursor-pointer"
-      >
-        <IoMdAdd className="text-white text-2xl" />
+        <div
+          onClick={handleNewPostClick}
+          className="absolute bottom-10 right-10 h-[40px] w-[40px] rounded-full flex justify-center items-center bg-black cursor-pointer"
+        >
+          <IoMdAdd className="text-white text-2xl" />
+        </div>
       </div>
     </>
   );
