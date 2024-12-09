@@ -1,0 +1,5 @@
+.carousel {
+  display: flex;
+  overflow: hidden; /* Prevent items from overflowing */
+  width: 100%; /* Ensure the carousel occupies full width */
+}

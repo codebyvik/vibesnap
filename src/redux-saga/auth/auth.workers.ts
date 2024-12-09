@@ -1,7 +1,7 @@
 import { put, call, take } from "redux-saga/effects";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth, db } from "../../configs/firebase";
+import { signInWithPopup } from "firebase/auth";
+import { auth, db, provider } from "../../configs/firebase";
 import {
   loginFailure,
   loginSuccess,
@@ -14,7 +14,6 @@ import { setLocalStorageItem } from "@/utils/localstorage";
 
 export function* LoginSaga(): SagaIterator {
   try {
-    const provider = new GoogleAuthProvider();
     const response = yield call(signInWithPopup, auth, provider);
 
     const user = response?.user;

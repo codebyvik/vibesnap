@@ -5,7 +5,7 @@ const Layout = ({ children }: any) => {
     <div className="flex justify-center items-center h-screen w-full ">
       <div className=" shadow-lg h-full sm:w-[392px] w-full relative px-2 py-1">
         <Navbar />
-        {children}
+        <div className="h-[calc(100vh-50px)]">{children}</div>
       </div>
     </div>
   );
