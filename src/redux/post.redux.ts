@@ -14,6 +14,7 @@ const initialPostsState = {
     postArray: null,
     error: null,
     success: false,
+    myPostsArray: null,
   },
 };
 
@@ -42,8 +43,17 @@ export const postRedux = createSlice({
       state.post.postDetails = action?.payload;
     },
 
+    fetchAllMyPosts: (state, _action) => {
+      state.allPosts.isfetching = true;
+      state.allPosts.postArray = null;
+    },
+    fetchAllMyPostsSuccess: (state, action) => {
+      state.allPosts.isfetching = false;
+      state.allPosts.myPostsArray = action?.payload;
+    },
     fetchAllPosts: (state) => {
       state.allPosts.isfetching = true;
+      state.allPosts.postArray = null;
     },
     fetchAllPostsSuccess: (state, action) => {
       state.allPosts.isfetching = false;
@@ -67,6 +77,8 @@ export const {
   fetchAllPosts,
   fetchAllPostsSuccess,
   fetchAllPostsFailed,
+  fetchAllMyPosts,
+  fetchAllMyPostsSuccess,
   resetPostsState,
 } = postRedux.actions;
 

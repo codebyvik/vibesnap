@@ -5,7 +5,6 @@ import { auth, db, provider } from "../../configs/firebase";
 import {
   loginFailure,
   loginSuccess,
-  resetAuthState,
   signOutUser,
   signOutUserSuccess,
 } from "../../redux/auth.redux";
@@ -19,16 +18,27 @@ export function* LoginSaga(): SagaIterator {
 
     const user = response?.user;
 
-    const userData = {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      profilePicture: user.photoURL,
-    };
+    let userData: any;
 
     const userDocRef = doc(db, "users", user.uid);
 
-    yield call(() => setDoc(userDocRef, userData));
+    const docSnapshot = yield call(() => getDoc(userDocRef));
+
+    if (docSnapshot.exists()) {
+      // Fetch the user data from Firestore
+      userData = docSnapshot.data();
+    } else {
+      // Create new user data object
+      userData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        profilePicture: user.photoURL,
+      };
+
+      // Save the new user data to Firestore
+      yield call(() => setDoc(userDocRef, userData));
+    }
 
     yield call(() => setLocalStorageItem("welcomeMessageShowed", false));
     yield call(() => setLocalStorageItem("signedIn", true));
@@ -68,7 +78,7 @@ export function* fetchUserSaga(): SagaIterator {
       }
     } else {
       // Reset Redux state if no user is signed in
-      yield put(resetAuthState());
+      yield put(signOutUser());
     }
   } catch (error) {
     yield put(signOutUser());
