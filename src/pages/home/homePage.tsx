@@ -56,10 +56,8 @@ const HomePage = () => {
           <p className="text-[16px] font-[600]">{userDetails?.name}</p>
         </div>
       </div>
-      <div className="h-[calc(100vh-50px)] px-2 pb-1">
-        <div>
-          <h4 className="text-lg font-bold">Feeds</h4>
-        </div>
+      <div className="h-[calc(100%-100px)] px-3 pb-1">
+        <h4 className="text-[24px] font-[800] mt-4 my-2">Feeds</h4>
 
         {/* posts */}
         <div className="h-[95%] overflow-scroll">

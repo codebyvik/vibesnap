@@ -28,7 +28,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="relative w-full flex justify-between px-2 pt-1">
+    <div className="relative w-full flex justify-between px-3 py-3">
       <div className="w-[40px] h-[40px] rounded-full bg-gray-100 flex justify-center items-center">
         <FiAlignRight className="cursor-pointer text-lg" />
       </div>
