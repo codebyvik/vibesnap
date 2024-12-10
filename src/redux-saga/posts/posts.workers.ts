@@ -1,13 +1,27 @@
 import { put, call } from "redux-saga/effects";
 import { db, postsCollectionref } from "../../configs/firebase";
-import { addDoc, doc, getDoc, getDocs, query, serverTimestamp, where } from "firebase/firestore";
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { SagaIterator } from "redux-saga";
 import {
   createPostSuccess,
   fetchAllMyPostsSuccess,
   fetchAllPostsFailed,
   fetchAllPostsSuccess,
+  likePostSuccess,
+  postActionError,
   postFailed,
+  unlikePostSuccess,
 } from "@/redux/post.redux";
 
 export function* uploadFilesSaga(action: any): SagaIterator {
@@ -108,5 +122,47 @@ export function* fetchAllPostsSaga(): SagaIterator {
     console.log("post error", error);
 
     yield put(fetchAllPostsFailed(error));
+  }
+}
+
+export function* likePostSaga(action: any): SagaIterator {
+  const { postId, uid } = action.payload; // Assuming postId and uid are passed in the action payload
+  try {
+    // Get a reference to the post document
+    const postRef = doc(db, "posts", postId);
+
+    // Update the likes array in Firestore
+    yield call(() =>
+      updateDoc(postRef, {
+        likes: arrayUnion(uid), // Adds the uid to the likes array
+      })
+    );
+
+    // Dispatch success action with the updated post ID
+    yield put(likePostSuccess({ postId, uid }));
+  } catch (error) {
+    console.error("Error liking post:", error);
+    yield put(postActionError(error));
+  }
+}
+
+export function* unlikePostSaga(action: any): SagaIterator {
+  const { postId, uid } = action.payload; // Assuming postId and uid are passed in the action payload
+  try {
+    // Get a reference to the post document
+    const postRef = doc(db, "posts", postId);
+
+    // Update the likes array in Firestore by removing the uid
+    yield call(() =>
+      updateDoc(postRef, {
+        likes: arrayRemove(uid), // Adds the uid to the likes array
+      })
+    );
+
+    // Dispatch success action with the updated post ID
+    yield put(unlikePostSuccess(postId));
+  } catch (error) {
+    console.error("Error unliking post:", error);
+    yield put(postActionError(error));
   }
 }

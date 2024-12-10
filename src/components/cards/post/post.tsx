@@ -1,10 +1,11 @@
+import { likePost, unlikePost } from "@/redux/post.redux";
 import { highlightHashtags } from "@/utils/paragraph.utils";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { IoPaperPlane } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 dayjs.extend(relativeTime);
 interface iPostProps {
@@ -12,14 +13,25 @@ interface iPostProps {
 }
 
 const Post = ({ postDetails }: iPostProps) => {
+  const dispatch = useDispatch();
+
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [postLiked, setPostLiked] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { userDetails } = useSelector((state: any) => state?.auth?.user);
 
-  const postLiked = postDetails?.likes?.find((item: any) => item?.uid === userDetails?.uid);
+  useEffect(() => {
+    const liked = postDetails?.likes?.find((item: any) => item?.uid === userDetails?.uid);
+
+    if (liked) {
+      setPostLiked(true);
+    } else {
+      setPostLiked(false);
+    }
+  }, [postDetails]);
 
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -30,6 +42,13 @@ const Post = ({ postDetails }: iPostProps) => {
       }
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const handleLike = () => {
+    dispatch(likePost({ postId: postDetails?.id, uid: userDetails?.uid }));
+  };
+  const handleUnlike = () => {
+    dispatch(unlikePost({ postId: postDetails?.id, uid: userDetails?.uid }));
   };
 
   return (
@@ -85,9 +104,9 @@ const Post = ({ postDetails }: iPostProps) => {
       <div className="flex justify-between items-center mt-2">
         <div className="flex gap-1 items-center text-pink-600">
           {postLiked ? (
-            <FaHeart className="cursor-pointer" />
+            <FaHeart onClick={handleLike} className="cursor-pointer" />
           ) : (
-            <FaRegHeart className="cursor-pointer" />
+            <FaRegHeart onClick={handleUnlike} className="cursor-pointer" />
           )}
 
           <p>{postDetails?.likes?.length}</p>
