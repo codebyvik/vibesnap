@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "dist/**/*.js",
-      "use": "@vercel/next"
-    }
-  ],
+
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
