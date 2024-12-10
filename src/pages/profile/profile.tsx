@@ -27,10 +27,10 @@ const Profile = () => {
 
       <div className="relative w-full ">
         <div className=" w-full h-[170px] rounded-b-2xl overflow-hidden bg-gray-400 flex justify-center items-center">
-          {userDetails?.coverPic ? (
+          {userDetails?.coverPic?.public_url ? (
             <img
               className="w-full h-full object-fill"
-              src={userDetails?.coverPic}
+              src={userDetails?.coverPic?.public_url}
               alt="cover-pic"
             />
           ) : (
@@ -39,7 +39,7 @@ const Profile = () => {
         </div>
         <div className="w-[100px] h-[100px] rounded-full overflow-hidden absolute z-10 bottom-[-30%] left-5">
           <Avatar className="w-full h-full">
-            <AvatarImage src={`${userDetails?.profilePicture}`} />
+            <AvatarImage src={`${userDetails?.profilePicture?.public_url}`} />
             <AvatarFallback>{userDetails?.name?.charAt(0)}</AvatarFallback>
           </Avatar>
 

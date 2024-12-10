@@ -39,6 +39,14 @@ export const authRedux = createSlice({
       state.user.userDetails = null;
     },
 
+    updateProfile: (state, _action) => {
+      state.user.isLoading = true;
+    },
+    updateProfileSuccess: (state) => {
+      state.user.isLoading = false;
+      state.user.success = true;
+    },
+
     resetAuthState: () => initialAuthState,
   },
 });
@@ -51,6 +59,8 @@ export const {
   resetAuthState,
   signOutUser,
   signOutUserSuccess,
+  updateProfile,
+  updateProfileSuccess,
 } = authRedux.actions;
 
 export default authRedux.reducer;
