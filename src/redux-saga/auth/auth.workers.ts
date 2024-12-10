@@ -7,8 +7,9 @@ import {
   loginSuccess,
   signOutUser,
   signOutUserSuccess,
+  updateProfileSuccess,
 } from "../../redux/auth.redux";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { SagaIterator, eventChannel } from "redux-saga";
 import { setLocalStorageItem } from "@/utils/localstorage";
 
@@ -33,7 +34,11 @@ export function* LoginSaga(): SagaIterator {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
-        profilePicture: user.photoURL,
+        profilePicture: {
+          public_url: user.photoURL,
+        },
+        coverPic: null,
+        bio: "",
       };
 
       // Save the new user data to Firestore
@@ -92,6 +97,18 @@ export function* signOutSaga(): SagaIterator {
     localStorage.clear();
     yield put(signOutUserSuccess());
     window.location.reload();
+  } catch (error) {
+    console.error("Error signing out :", error);
+  }
+}
+
+export function* updateProfileSaga(action: any): SagaIterator {
+  const { uid } = action?.payload;
+  try {
+    const docRef = doc(db, "users", uid);
+    yield call(() => updateDoc(docRef, action?.payload)); // Update document fields
+
+    yield put(updateProfileSuccess());
   } catch (error) {
     console.error("Error signing out :", error);
   }
