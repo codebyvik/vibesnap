@@ -7,8 +7,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  orderBy,
   query,
   serverTimestamp,
+  startAfter,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -74,9 +77,26 @@ export function* fetchAllMyPostsSaga(action: any): SagaIterator {
   }
 }
 
-export function* fetchAllPostsSaga(): SagaIterator {
+export function* fetchAllPostsSaga(action: any): SagaIterator {
+  const { lastVisible, pageSize = 20 } = action.payload || {};
+
   try {
-    const querySnapshot: any = yield call(getDocs, postsCollectionref);
+    let postsQuery = query(
+      postsCollectionref,
+      orderBy("createdAt", "desc"), // Sort by creation time (descending)
+      limit(pageSize) // Limit the number of posts
+    );
+
+    if (lastVisible) {
+      postsQuery = query(
+        postsCollectionref,
+        orderBy("createdAt", "desc"),
+        startAfter(lastVisible),
+        limit(pageSize)
+      );
+    }
+
+    const querySnapshot: any = yield call(getDocs, postsQuery);
 
     console.log({ querySnapshot });
 
@@ -116,10 +136,19 @@ export function* fetchAllPostsSaga(): SagaIterator {
       return postsWithUserDetails;
     });
 
+    // Get the last document for pagination
+    const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+
     console.log("Fetched Posts:", posts);
 
     // Dispatch the success action with the posts
-    yield put(fetchAllPostsSuccess(posts));
+    yield put(
+      fetchAllPostsSuccess({
+        posts,
+        lastVisible: newLastVisible,
+        hasMore: querySnapshot.docs.length === pageSize,
+      })
+    );
   } catch (error) {
     console.log("post error", error);
 

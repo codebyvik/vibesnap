@@ -12,9 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 dayjs.extend(relativeTime);
 interface iPostProps {
   postDetails: any;
+  isVisible?: boolean;
+  postIdx?: number;
 }
 
-const Post = ({ postDetails }: iPostProps) => {
+const Post = ({ postDetails, isVisible, postIdx }: iPostProps) => {
   const dispatch = useDispatch();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -29,20 +31,17 @@ const Post = ({ postDetails }: iPostProps) => {
 
   useEffect(() => {
     const liked = postDetails?.likes?.find((item: any) => item === userDetails?.uid);
-
-    if (liked) {
-      setPostLiked(true);
-    } else {
-      setPostLiked(false);
-    }
+    setPostLiked(!!liked);
   }, [postDetails]);
 
   const handlePlayPause = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
+        videoRef.current.muted = false;
       } else {
         videoRef.current.play();
+        videoRef.current.muted = false;
       }
       setIsPlaying(!isPlaying);
     }
@@ -55,8 +54,20 @@ const Post = ({ postDetails }: iPostProps) => {
     dispatch(unlikePost({ postId: postDetails?.id, uid: userDetails?.uid }));
   };
 
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isVisible) {
+        console.log({ isVisible });
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [isVisible]);
   return (
-    <div className="px-3 py-2 bg-yellow-100 rounded-2xl mt-2 mb-4">
+    <div id={`post-${postIdx}`} className="px-3 py-2 bg-yellow-100 rounded-2xl mt-2 mb-4">
       <div className="flex gap-2 items-center">
         <Avatar className="w-[40px] h-[40px] rounded-full ">
           <AvatarImage src={`${postDetails?.userProfilePicture?.public_url}`} />
@@ -76,6 +87,7 @@ const Post = ({ postDetails }: iPostProps) => {
           if (item?.mediaType === "image") {
             return (
               <img
+                key={idx}
                 onClick={() => setSelectedIndex(idx)}
                 className={`cursor-pointer h-full ${
                   postDetails?.files?.length === 1
@@ -91,6 +103,7 @@ const Post = ({ postDetails }: iPostProps) => {
           } else {
             return (
               <video
+                key={idx}
                 onClick={() => {
                   setSelectedIndex(idx);
                   handlePlayPause();
@@ -103,9 +116,9 @@ const Post = ({ postDetails }: iPostProps) => {
                     ? "w-[70%]"
                     : "w-[30%]"
                 } object-cover rounded-2xl transition-all duration-500 ease-in-out`}
-                autoPlay
+                muted
                 loop
-                controls={false} // Disables default controls
+                controls={false}
               >
                 <source src={`${item?.public_url}`} />
               </video>

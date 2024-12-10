@@ -18,13 +18,15 @@ const Login = () => {
     dispatch(loginUser());
   };
 
+  const signedIn = getLocalStorageItem("signedIn");
   useEffect(() => {
     // if signedIn or if login is success navigate the user to home page
-    const signedIn = getLocalStorageItem("signedIn");
-    if (success || signedIn) {
+    console.log({ signedIn });
+
+    if (success && signedIn) {
       navigate(routeNames.homePage);
     }
-  }, [success]);
+  }, [success, signedIn]);
 
   return (
     <div className="flex justify-center items-center h-screen w-full ">

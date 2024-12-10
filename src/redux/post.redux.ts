@@ -11,10 +11,12 @@ const initialPostsState = {
   allPosts: {
     isLoading: false,
     isfetching: false,
-    postArray: null,
+    postArray: [],
     error: null,
     success: false,
     myPostsArray: null,
+    lastVisible: 0,
+    hasMore: false,
   },
   postActions: {
     isLoading: false,
@@ -51,19 +53,20 @@ export const postRedux = createSlice({
 
     fetchAllMyPosts: (state, _action) => {
       state.allPosts.isfetching = true;
-      state.allPosts.postArray = null;
+      state.allPosts.postArray = [];
     },
     fetchAllMyPostsSuccess: (state, action) => {
       state.allPosts.isfetching = false;
       state.allPosts.myPostsArray = action?.payload;
     },
-    fetchAllPosts: (state) => {
+    fetchAllPosts: (state, _action) => {
       state.allPosts.isfetching = true;
-      state.allPosts.postArray = null;
     },
-    fetchAllPostsSuccess: (state, action) => {
+    fetchAllPostsSuccess: (state: any, action) => {
       state.allPosts.isfetching = false;
-      state.allPosts.postArray = action?.payload;
+      state.allPosts.postArray = [...state.allPosts.postArray, ...action?.payload?.posts];
+      state.allPosts.lastVisible = action?.payload?.lastVisible;
+      state.allPosts.hasMore = action?.payload?.hasMore;
     },
     fetchAllPostsFailed: (state, action) => {
       state.allPosts.isfetching = false;

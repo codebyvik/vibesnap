@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IoMdAdd } from "react-icons/io";
-
+import InfiniteScroll from "react-infinite-scroll-component";
 import "./homepage.style.css";
 import { useNavigate } from "react-router-dom";
 import { routeNames } from "@/routes/routes";
@@ -15,12 +15,16 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const showMessageStatus = getLocalStorageItem("welcomeMessageShowed");
+  const [visiblePosts, setVisiblePosts] = useState<number[]>([]);
+  const feedContainerRef = useRef<HTMLDivElement | null>(null);
+
+  console.log({ visiblePosts });
 
   const { userDetails } = useSelector((state: any) => state.auth.user);
-  const { postArray } = useSelector((state: any) => state.posts.allPosts);
+  const { postArray, hasMore, lastVisible } = useSelector((state: any) => state.posts.allPosts);
 
   useEffect(() => {
-    dispatch(fetchAllPosts());
+    dispatch(fetchAllPosts({ lastVisible, pageSize: 2 }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -36,6 +40,43 @@ const HomePage = () => {
   const handleNewPostClick = () => {
     navigate(routeNames.newPost);
   };
+
+  const checkVisibility = () => {
+    if (!feedContainerRef.current) return;
+
+    const newVisiblePosts: number[] = [];
+    postArray.forEach((_: any, idx: any) => {
+      const postElement = document.getElementById(`post-${idx}`);
+      if (postElement) {
+        const rect = postElement.getBoundingClientRect();
+        const isVisible =
+          rect.top >= 0 &&
+          rect.bottom <= window.innerHeight &&
+          rect.left >= 0 &&
+          rect.right <= window.innerWidth;
+
+        if (isVisible) {
+          newVisiblePosts.push(idx);
+        }
+      }
+    });
+
+    setVisiblePosts(newVisiblePosts);
+  };
+
+  useEffect(() => {
+    const container = feedContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      requestAnimationFrame(checkVisibility);
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [postArray]);
 
   return (
     <>
@@ -56,14 +97,26 @@ const HomePage = () => {
           <p className="text-[16px] font-[600]">{userDetails?.name}</p>
         </div>
       </div>
-      <div className="h-[calc(100%-100px)] px-3 pb-1">
+      <div className="h-[calc(100%-100px)] px-3 pb-1  ">
         <h4 className="text-[24px] font-[800] mt-4 my-2">Feeds</h4>
 
-        {/* posts */}
-        <div className="h-[95%] overflow-scroll">
-          {postArray?.map((item: any, idx: any) => (
-            <Post postDetails={item} key={idx} />
-          ))}
+        <div id="feedContainer" className="h-[95%] overflow-auto" ref={feedContainerRef}>
+          <InfiniteScroll
+            dataLength={postArray?.length}
+            next={() => dispatch(fetchAllPosts({ lastVisible, pageSize: 20 }))}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+            scrollableTarget="feedContainer"
+          >
+            {postArray?.map((item: any, idx: any) => (
+              <Post
+                postDetails={item}
+                key={idx}
+                isVisible={visiblePosts.includes(idx)}
+                postIdx={idx}
+              />
+            ))}
+          </InfiniteScroll>
         </div>
 
         {/* Floating add post button */}
