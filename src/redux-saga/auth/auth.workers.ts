@@ -9,7 +9,7 @@ import {
   signOutUserSuccess,
   updateProfileSuccess,
 } from "../../redux/auth.redux";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { SagaIterator, eventChannel } from "redux-saga";
 import { setLocalStorageItem } from "@/utils/localstorage";
 
@@ -39,6 +39,8 @@ export function* LoginSaga(): SagaIterator {
         },
         coverPic: null,
         bio: "",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       };
 
       // Save the new user data to Firestore
@@ -113,3 +115,35 @@ export function* updateProfileSaga(action: any): SagaIterator {
     console.error("Error signing out :", error);
   }
 }
+
+// {
+//     "id": "oTraUN6PqfgIChe3rTuk",
+//     "likes": [],
+//     "text": "first post #first",
+//     "files": [
+//         {
+//             "mediaType": "video",
+//             "public_url": "http://res.cloudinary.com/vikibunny/video/upload/v1733822500/posts/ovq2b5vtmqnj5xqp4zgd.mp4",
+//             "public_id": "posts/ovq2b5vtmqnj5xqp4zgd"
+//         },
+//         {
+//             "mediaType": "image",
+//             "public_url": "http://res.cloudinary.com/vikibunny/image/upload/v1733822502/posts/q8k0lfwwb6qmp1nxoy29.jpg",
+//             "public_id": "posts/q8k0lfwwb6qmp1nxoy29"
+//         }
+//     ],
+//     "createdAt": {
+//         "seconds": 1733822502,
+//         "nanoseconds": 920000000
+//     },
+//     "updatedAt": {
+//         "seconds": 1733822502,
+//         "nanoseconds": 920000000
+//     },
+
+//     "userName": "Vikas br",
+//     "userProfilePicture": {
+//         "public_id": "profile/akwbwtcozd8pbdphvaez",
+//         "public_url": "http://res.cloudinary.com/vikibunny/image/upload/v1733822563/profile/akwbwtcozd8pbdphvaez.png"
+//     }
+// }

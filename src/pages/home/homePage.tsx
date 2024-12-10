@@ -5,10 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IoMdAdd } from "react-icons/io";
 
 import "./homepage.style.css";
-import { signOutUser } from "@/redux/auth.redux";
 import { useNavigate } from "react-router-dom";
 import { routeNames } from "@/routes/routes";
 import Navbar from "@/layout/navbar";
+import Post from "@/components/cards/post/post";
+import { fetchAllPosts } from "@/redux/post.redux";
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,6 +17,12 @@ const HomePage = () => {
   const showMessageStatus = getLocalStorageItem("welcomeMessageShowed");
 
   const { userDetails } = useSelector((state: any) => state.auth.user);
+  const { postArray } = useSelector((state: any) => state.posts.allPosts);
+
+  useEffect(() => {
+    dispatch(fetchAllPosts());
+  }, [dispatch]);
+
   useEffect(() => {
     if (!showMessageStatus) {
       setShowMessage(true);
@@ -54,7 +61,12 @@ const HomePage = () => {
           <h4 className="text-lg font-bold">Feeds</h4>
         </div>
 
-        <button onClick={() => dispatch(signOutUser())}>signout</button>
+        {/* posts */}
+        <div className="h-[95%] overflow-scroll">
+          {postArray?.map((item: any, idx: any) => (
+            <Post postDetails={item} key={idx} />
+          ))}
+        </div>
 
         {/* Floating add post button */}
 

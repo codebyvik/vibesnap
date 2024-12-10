@@ -16,6 +16,12 @@ const initialPostsState = {
     success: false,
     myPostsArray: null,
   },
+  postActions: {
+    isLoading: false,
+    isfetching: false,
+    error: null,
+    success: false,
+  },
 };
 
 export const postRedux = createSlice({
@@ -64,6 +70,51 @@ export const postRedux = createSlice({
       state.allPosts.error = action?.payload;
     },
 
+    likePost: (state, _action) => {
+      state.postActions.isLoading = true;
+      state.postActions.success = false;
+    },
+    likePostSuccess: (state: any, action) => {
+      state.postActions.isLoading = false;
+
+      const data: any = state.allPosts.postArray?.find(
+        (item: any) => item?.id === action?.payload?.postId
+      );
+
+      const filteredData = state.allPosts.postArray?.filter((item: any) => item?.id !== data?.id);
+      const newArray = [
+        ...filteredData,
+        { ...data, likes: [...data?.likes, action?.payload?.uid] },
+      ];
+      state.allPosts.postArray = newArray;
+      state.postActions.success = true;
+    },
+
+    unlikePost: (state, _action) => {
+      state.postActions.isLoading = true;
+      state.postActions.success = false;
+    },
+    unlikePostSuccess: (state: any, action) => {
+      state.postActions.isLoading = false;
+      const data: any = state.allPosts.postArray?.find(
+        (item: any) => item?.id === action?.payload?.postId
+      );
+
+      const likes = data?.likes?.filter((item: any) => item !== action?.payload?.uid);
+
+      const filteredData = state.allPosts.postArray?.filter((item: any) => item?.id !== data?.id);
+
+      const newArray = [...filteredData, { ...data, likes: [...likes] }];
+      state.allPosts.postArray = newArray;
+      state.postActions.success = true;
+    },
+
+    postActionError: (state, action) => {
+      state.postActions.error = action?.payload;
+      state.postActions.isfetching = false;
+      state.postActions.isLoading = false;
+    },
+
     resetPostsState: () => initialPostsState,
   },
 });
@@ -80,6 +131,11 @@ export const {
   fetchAllMyPosts,
   fetchAllMyPostsSuccess,
   resetPostsState,
+  likePost,
+  likePostSuccess,
+  unlikePost,
+  unlikePostSuccess,
+  postActionError,
 } = postRedux.actions;
 
 export default postRedux.reducer;
