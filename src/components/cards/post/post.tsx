@@ -21,7 +21,7 @@ const Post = ({ postDetails, isVisible, postIdx }: iPostProps) => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [postLiked, setPostLiked] = useState(false);
-
+  const [totalLikes, setTotalLikes] = useState<number>(postDetails?.likes?.length);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -32,6 +32,7 @@ const Post = ({ postDetails, isVisible, postIdx }: iPostProps) => {
   useEffect(() => {
     const liked = postDetails?.likes?.find((item: any) => item === userDetails?.uid);
     setPostLiked(!!liked);
+    setTotalLikes(postDetails?.likes?.length);
   }, [postDetails]);
 
   const handlePlayPause = () => {
@@ -48,16 +49,19 @@ const Post = ({ postDetails, isVisible, postIdx }: iPostProps) => {
   };
 
   const handleLike = () => {
+    setTotalLikes(totalLikes + 1);
+    setPostLiked(true);
     dispatch(likePost({ postId: postDetails?.id, uid: userDetails?.uid }));
   };
   const handleUnlike = () => {
+    setTotalLikes(totalLikes - 1);
+    setPostLiked(false);
     dispatch(unlikePost({ postId: postDetails?.id, uid: userDetails?.uid }));
   };
 
   useEffect(() => {
     if (videoRef.current) {
       if (isVisible) {
-        console.log({ isVisible });
         videoRef.current.play();
         setIsPlaying(true);
       } else {
@@ -134,7 +138,7 @@ const Post = ({ postDetails, isVisible, postIdx }: iPostProps) => {
             <FaRegHeart onClick={handleLike} className="cursor-pointer" />
           )}
 
-          <p>{postDetails?.likes?.length}</p>
+          <p>{totalLikes}</p>
         </div>
         <div
           onClick={() => setShowShareModal(true)}

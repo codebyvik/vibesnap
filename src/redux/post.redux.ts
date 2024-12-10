@@ -77,19 +77,8 @@ export const postRedux = createSlice({
       state.postActions.isLoading = true;
       state.postActions.success = false;
     },
-    likePostSuccess: (state: any, action) => {
+    likePostSuccess: (state, _action) => {
       state.postActions.isLoading = false;
-
-      const data: any = state.allPosts.postArray?.find(
-        (item: any) => item?.id === action?.payload?.postId
-      );
-
-      const filteredData = state.allPosts.postArray?.filter((item: any) => item?.id !== data?.id);
-      const newArray = [
-        ...filteredData,
-        { ...data, likes: [...data?.likes, action?.payload?.uid] },
-      ];
-      state.allPosts.postArray = newArray;
       state.postActions.success = true;
     },
 
@@ -97,18 +86,8 @@ export const postRedux = createSlice({
       state.postActions.isLoading = true;
       state.postActions.success = false;
     },
-    unlikePostSuccess: (state: any, action) => {
+    unlikePostSuccess: (state, _action) => {
       state.postActions.isLoading = false;
-      const data: any = state.allPosts.postArray?.find(
-        (item: any) => item?.id === action?.payload?.postId
-      );
-
-      const likes = data?.likes?.filter((item: any) => item !== action?.payload?.uid);
-
-      const filteredData = state.allPosts.postArray?.filter((item: any) => item?.id !== data?.id);
-
-      const newArray = [...filteredData, { ...data, likes: [...likes] }];
-      state.allPosts.postArray = newArray;
       state.postActions.success = true;
     },
 
