@@ -51,7 +51,9 @@ export function* uploadFilesSaga(action: any): SagaIterator {
 export function* fetchAllMyPostsSaga(action: any): SagaIterator {
   const { uid } = action?.payload;
   try {
-    const postsQuery = query(postsCollectionref, where("uid", "==", uid));
+    const userRef = doc(db, "users", uid);
+
+    const postsQuery = query(postsCollectionref, where("userRef", "==", userRef));
     const querySnapshot: any = yield call(getDocs, postsQuery);
 
     console.log({ querySnapshot });
