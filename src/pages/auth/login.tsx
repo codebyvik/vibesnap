@@ -19,10 +19,9 @@ const Login = () => {
   };
 
   useEffect(() => {
+    // if signedIn or if login is success navigate the user to home page
     const signedIn = getLocalStorageItem("signedIn");
-    console.log({ signedIn });
-
-    if (signedIn) {
+    if (success || signedIn) {
       navigate(routeNames.homePage);
     }
   }, [success]);
@@ -39,6 +38,7 @@ const Login = () => {
             </div>
             <p className="text-[16px] font-[400] mb-3">Moments That Matter, Shared Forever.</p>
 
+            {/* SIGNIN with google btn */}
             <button
               onClick={handleGoogleLogin}
               className="mt-5 flex items-center justify-center bg-bgDark text-white px-4 py-2 rounded-full shadow hover:bg-gray-800 focus:outline-none"
