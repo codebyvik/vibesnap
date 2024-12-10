@@ -21,7 +21,7 @@ export const authRedux = createSlice({
       state.user.isLoading = false;
       state.user.isfetching = false;
       state.user.userDetails = action?.payload;
-      state.user.success = true;
+      state.user.success = false;
     },
     loginFailure: (state, action) => {
       state.user.isLoading = false;
@@ -30,6 +30,7 @@ export const authRedux = createSlice({
 
     fetchUserData: (state) => {
       state.user.isfetching = true;
+      state.user.success = false;
     },
     signOutUser: (state) => {
       state.user.isLoading = true;
@@ -41,6 +42,7 @@ export const authRedux = createSlice({
 
     updateProfile: (state, _action) => {
       state.user.isLoading = true;
+      state.user.success = false;
     },
     updateProfileSuccess: (state) => {
       state.user.isLoading = false;

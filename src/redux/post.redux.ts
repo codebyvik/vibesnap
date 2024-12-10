@@ -37,6 +37,7 @@ export const postRedux = createSlice({
       state.post.isLoading = false;
       state.post.isfetching = false;
       state.post.postDetails = action?.payload;
+      state.post.success = true;
     },
     postFailed: (state, action) => {
       state.post.isLoading = false;

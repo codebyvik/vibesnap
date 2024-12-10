@@ -1,5 +1,6 @@
 import PageHeader from "@/components/shared/pageHeader/pageHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { fetchUserData } from "@/redux/auth.redux";
 import { fetchAllMyPosts } from "@/redux/post.redux";
 import { baseRoutes } from "@/routes/routes";
 import { useEffect } from "react";
@@ -14,6 +15,9 @@ const Profile = () => {
   const { userDetails } = useSelector((state: any) => state?.auth?.user);
   const { myPostsArray } = useSelector((state: any) => state?.posts?.allPosts);
   useEffect(() => {
+    if (!userDetails) {
+      dispatch(fetchUserData());
+    }
     dispatch(fetchAllMyPosts({ uid: params?.id }));
   }, [dispatch, params?.id]);
 
@@ -87,6 +91,7 @@ const Profile = () => {
                     controls={false}
                     autoPlay
                     loop
+                    muted
                   >
                     <source src={post?.files?.[0]?.public_url} />
                   </video>

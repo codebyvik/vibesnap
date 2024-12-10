@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { shareicons } from "@/constants/shareIcons.constants";
+import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { IoIosCopy } from "react-icons/io";
 
@@ -17,7 +18,7 @@ interface ishareProps {
 
 const Share = ({ url, showModal, onClose }: ishareProps) => {
   const [isOpen, setIsOpen] = useState(showModal);
-
+  const { toast } = useToast();
   useEffect(() => {
     if (showModal) {
       setIsOpen(true); // Open immediately
@@ -33,7 +34,11 @@ const Share = ({ url, showModal, onClose }: ishareProps) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(url);
-    // TODO show - toast
+
+    toast({
+      title: "url copied",
+      description: url,
+    });
   };
 
   const handleShare = (appName: string) => {
@@ -82,28 +87,27 @@ const Share = ({ url, showModal, onClose }: ishareProps) => {
           <DialogHeader>
             <DialogTitle className="font-bold text-2xl text-start">Share Post</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-4 gap-2 py-4 justify-items-center">
+          <div className="grid grid-cols-4  gap-3 py-4 justify-items-center">
             {shareicons.map((item, idx) => (
-              <div
-                className={`w-[50px] h-[50px] rounded-full flex justify-center items-center cursor-pointer`}
-                key={idx}
-                style={{ backgroundColor: item.color }}
-                onClick={() => handleShare(item.appName)}
-              >
-                <img className="w-[30px]" src={item.icon} alt={`share-icon-${idx}`} />
+              <div key={idx} className="flex flex-col justify-center items-center">
+                <div
+                  className={`w-[50px] h-[50px] rounded-full flex justify-center items-center cursor-pointer`}
+                  style={{ backgroundColor: item.color }}
+                  onClick={() => handleShare(item.appName)}
+                >
+                  <img className="w-[30px]" src={item.icon} alt={`share-icon-${idx}`} />
+                </div>
+                <p className="text-sm">{item.appName}</p>
               </div>
             ))}
           </div>
           <DialogFooter className="">
             <div className="w-full">
               <h6 className="font-bold">Page Link</h6>
-              <p className="px-3 py-3 relative bg-gray-100 rounded-lg text-gray-400 text-sm">
-                {url}
-                <IoIosCopy
-                  onClick={handleCopy}
-                  className="absolute right-2 top-[10px] text-xl cursor-pointer"
-                />
-              </p>
+              <div className="w-[98%] px-3 py-3 flex justify-between items-center bg-gray-100 rounded-lg text-gray-400 text-sm text-wrap text-ellipsis">
+                <p className="text-wrap w-[90%] break-words">{url}</p>
+                <IoIosCopy onClick={handleCopy} className=" text-xl cursor-pointer" />
+              </div>
             </div>
           </DialogFooter>
         </DialogContent>

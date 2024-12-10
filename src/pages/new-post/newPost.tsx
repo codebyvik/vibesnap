@@ -2,10 +2,14 @@ import CustomFileCarousel from "@/components/carousel/customImageCarousel";
 import PageHeader from "@/components/shared/pageHeader/pageHeader";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadPreset, uploadUrl } from "@/configs/cloudinary";
+import { useToast } from "@/hooks/use-toast";
 import { createPost } from "@/redux/post.redux";
+import { routeNames } from "@/routes/routes";
+import { highlightHashtags } from "@/utils/paragraph.utils";
 import axios, { AxiosResponse } from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface IuploadedFiles {
   public_id: string | number;
@@ -15,34 +19,28 @@ interface IuploadedFiles {
 
 const NewPost = () => {
   const dispatch = useDispatch();
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [files, setFiles] = useState<any[]>([]);
   const [text, setText] = useState("");
   const { userDetails } = useSelector((state: any) => state?.auth?.user);
+  const { success } = useSelector((state: any) => state?.posts?.post);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
-  const highlightHashtags = (input: string) => {
-    const hashtagRegex = /#\w+/g; // Match full hashtags
-
-    const parts = input.split(/(#\w+)/g); // Split the text, keeping hashtags in the array
-
-    return parts.map((part, idx) => {
-      if (hashtagRegex.test(part)) {
-        // If the part is a hashtag, style it
-        return (
-          <span key={idx} className="text-blue-500">
-            {part}
-          </span>
-        );
-      }
-
-      // Otherwise, render plain text
-      return <span key={idx}>{part}</span>;
-    });
-  };
+  useEffect(() => {
+    if (success) {
+      toast({
+        title: "Post success",
+      });
+      setTimeout(() => {
+        navigate(routeNames.homePage);
+      }, 1000);
+    }
+  }, [success]);
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -76,8 +74,6 @@ const NewPost = () => {
         const response: AxiosResponse = await axios.post(`${uploadUrl}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-
-        console.log("cloud", { response });
 
         const mediaType = file?.type.startsWith("image/") ? "image" : "video";
 

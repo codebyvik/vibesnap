@@ -150,7 +150,7 @@ const Post = ({ postDetails, isVisible, postIdx }: iPostProps) => {
       </div>
       {showshareModal && (
         <Share
-          url="htpps://www.vibesnap.com/161264246"
+          url={`${window.location.href}${postDetails?.id}`}
           showModal={showshareModal}
           onClose={() => setShowShareModal(false)}
         />

@@ -12,7 +12,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { success } = useSelector((state: any) => state.auth.user);
+  const { userDetails } = useSelector((state: any) => state.auth.user);
 
   const handleGoogleLogin = () => {
     dispatch(loginUser());
@@ -23,10 +23,10 @@ const Login = () => {
     // if signedIn or if login is success navigate the user to home page
     console.log({ signedIn });
 
-    if (success && signedIn) {
+    if (userDetails) {
       navigate(routeNames.homePage);
     }
-  }, [success, signedIn]);
+  }, [userDetails, signedIn]);
 
   return (
     <div className="flex justify-center items-center h-screen w-full ">

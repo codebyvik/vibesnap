@@ -18,8 +18,6 @@ const HomePage = () => {
   const [visiblePosts, setVisiblePosts] = useState<number[]>([]);
   const feedContainerRef = useRef<HTMLDivElement | null>(null);
 
-  console.log({ visiblePosts });
-
   const { userDetails } = useSelector((state: any) => state.auth.user);
   const { postArray, hasMore, lastVisible } = useSelector((state: any) => state.posts.allPosts);
 

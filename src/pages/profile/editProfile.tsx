@@ -8,15 +8,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import { uploadPreset, uploadUrl } from "@/configs/cloudinary";
 import axios, { AxiosResponse } from "axios";
-import { updateProfile } from "@/redux/auth.redux";
+import { fetchUserData, updateProfile } from "@/redux/auth.redux";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { baseRoutes } from "@/routes/routes";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
   const profilePicInputRef = useRef<HTMLInputElement | null>(null);
   const coverPicInputRef = useRef<HTMLInputElement | null>(null);
-
-  const { userDetails } = useSelector((state: any) => state?.auth?.user);
-
+  const { toast } = useToast();
+  const { userDetails, success } = useSelector((state: any) => state?.auth?.user);
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   const [profilePic, setProfilePic] = useState<any>(null);
@@ -28,6 +31,18 @@ const EditProfile = () => {
       setBio(userDetails?.bio);
     }
   }, [userDetails]);
+
+  useEffect(() => {
+    if (success) {
+      toast({
+        title: "Post success",
+      });
+      setTimeout(() => {
+        dispatch(fetchUserData());
+        navigate(`${baseRoutes.userProfile}/${userDetails?.uid}`, { replace: true });
+      }, 1000);
+    }
+  }, [success]);
 
   const handleProfilePicChange = (e: any) => {
     const file = e?.target?.files[0];
@@ -157,8 +172,6 @@ const EditProfile = () => {
                 <HiPencil className="w-[12px] text-black" />
               </div>
             </div>
-
-            {/* <img className="w-full h-full object-cover" src={userDetails?.} alt="profile-pic" /> */}
           </div>
         </div>
         <div className="mt-[70px] px-2">
