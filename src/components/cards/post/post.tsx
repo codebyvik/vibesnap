@@ -1,3 +1,4 @@
+import Share from "@/components/shared/share/share";
 import { likePost, unlikePost } from "@/redux/post.redux";
 import { highlightHashtags } from "@/utils/paragraph.utils";
 import dayjs from "dayjs";
@@ -20,6 +21,8 @@ const Post = ({ postDetails }: iPostProps) => {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const [showshareModal, setShowShareModal] = useState<boolean>(false);
 
   const { userDetails } = useSelector((state: any) => state?.auth?.user);
 
@@ -111,11 +114,21 @@ const Post = ({ postDetails }: iPostProps) => {
 
           <p>{postDetails?.likes?.length}</p>
         </div>
-        <div className="flex gap-1 items-center px-3 py-1 rounded-full bg-gray-50 cursor-pointer">
+        <div
+          onClick={() => setShowShareModal(true)}
+          className="flex gap-1 items-center px-3 py-1 rounded-full bg-gray-50 cursor-pointer"
+        >
           <IoPaperPlane />
           <p className="font-bold text-sm">Share</p>
         </div>
       </div>
+      {showshareModal && (
+        <Share
+          url="htpps://www.vibesnap.com/161264246"
+          showModal={showshareModal}
+          onClose={() => setShowShareModal(false)}
+        />
+      )}
     </div>
   );
 };
