@@ -76,11 +76,14 @@ export const postRedux = createSlice({
     },
     likePostSuccess: (state: any, action) => {
       state.postActions.isLoading = false;
+
       const data: any = state.allPosts.postArray?.find(
         (item: any) => item?.id === action?.payload?.postId
       );
+
+      const filteredData = state.allPosts.postArray?.filter((item: any) => item?.id !== data?.id);
       const newArray = [
-        ...state.allPosts.postArray,
+        ...filteredData,
         { ...data, likes: [...data?.likes, action?.payload?.uid] },
       ];
       state.allPosts.postArray = newArray;
@@ -98,7 +101,10 @@ export const postRedux = createSlice({
       );
 
       const likes = data?.likes?.filter((item: any) => item !== action?.payload?.uid);
-      const newArray = [...state.allPosts.postArray, { ...data, likes: [...likes] }];
+
+      const filteredData = state.allPosts.postArray?.filter((item: any) => item?.id !== data?.id);
+
+      const newArray = [...filteredData, { ...data, likes: [...likes] }];
       state.allPosts.postArray = newArray;
       state.postActions.success = true;
     },

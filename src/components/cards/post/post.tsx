@@ -24,7 +24,7 @@ const Post = ({ postDetails }: iPostProps) => {
   const { userDetails } = useSelector((state: any) => state?.auth?.user);
 
   useEffect(() => {
-    const liked = postDetails?.likes?.find((item: any) => item?.uid === userDetails?.uid);
+    const liked = postDetails?.likes?.find((item: any) => item === userDetails?.uid);
 
     if (liked) {
       setPostLiked(true);
@@ -104,9 +104,9 @@ const Post = ({ postDetails }: iPostProps) => {
       <div className="flex justify-between items-center mt-2">
         <div className="flex gap-1 items-center text-pink-600">
           {postLiked ? (
-            <FaHeart onClick={handleLike} className="cursor-pointer" />
+            <FaHeart onClick={handleUnlike} className="cursor-pointer" />
           ) : (
-            <FaRegHeart onClick={handleUnlike} className="cursor-pointer" />
+            <FaRegHeart onClick={handleLike} className="cursor-pointer" />
           )}
 
           <p>{postDetails?.likes?.length}</p>

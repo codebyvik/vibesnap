@@ -160,7 +160,7 @@ export function* unlikePostSaga(action: any): SagaIterator {
     );
 
     // Dispatch success action with the updated post ID
-    yield put(unlikePostSuccess(postId));
+    yield put(unlikePostSuccess({ postId, uid }));
   } catch (error) {
     console.error("Error unliking post:", error);
     yield put(postActionError(error));
