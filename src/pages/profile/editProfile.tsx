@@ -73,8 +73,6 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("submitting");
-
     let data: any = {
       name,
       bio,

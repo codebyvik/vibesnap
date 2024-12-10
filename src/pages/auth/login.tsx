@@ -21,7 +21,6 @@ const Login = () => {
   const signedIn = getLocalStorageItem("signedIn");
   useEffect(() => {
     // if signedIn or if login is success navigate the user to home page
-    console.log({ signedIn });
 
     if (userDetails) {
       navigate(routeNames.homePage);

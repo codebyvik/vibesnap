@@ -59,14 +59,10 @@ export function* fetchAllMyPostsSaga(action: any): SagaIterator {
     const postsQuery = query(postsCollectionref, where("userRef", "==", userRef));
     const querySnapshot: any = yield call(getDocs, postsQuery);
 
-    console.log({ querySnapshot });
-
     const posts = querySnapshot.docs.map((doc: any) => ({
       id: doc.id, // Document ID
       ...doc.data(), // Document data
     }));
-
-    console.log("Fetched Posts:", posts);
 
     // Dispatch the success action with the posts
     yield put(fetchAllMyPostsSuccess(posts));
@@ -97,8 +93,6 @@ export function* fetchAllPostsSaga(action: any): SagaIterator {
     }
 
     const querySnapshot: any = yield call(getDocs, postsQuery);
-
-    console.log({ querySnapshot });
 
     const posts = yield call(async () => {
       const postsWithUserDetails = [];
@@ -138,8 +132,6 @@ export function* fetchAllPostsSaga(action: any): SagaIterator {
 
     // Get the last document for pagination
     const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-
-    console.log("Fetched Posts:", posts);
 
     // Dispatch the success action with the posts
     yield put(
