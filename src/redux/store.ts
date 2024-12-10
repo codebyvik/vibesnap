@@ -12,7 +12,7 @@ const store = configureStore({
     posts: postReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
+    getDefaultMiddleware({ serializableCheck: false, thunk: false }).concat(sagaMiddleware),
 });
 
 sagaMiddleware.run(rootSaga);
