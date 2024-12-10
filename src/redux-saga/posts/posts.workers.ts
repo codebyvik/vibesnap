@@ -1,6 +1,6 @@
 import { put, call } from "redux-saga/effects";
 import { db, postsCollectionref } from "../../configs/firebase";
-import { addDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, doc, getDoc, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { SagaIterator } from "redux-saga";
 import {
   createPostSuccess,
@@ -20,6 +20,8 @@ export function* uploadFilesSaga(action: any): SagaIterator {
       files,
       userRef,
       likes,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     };
 
     const response = yield call(() => addDoc(postsCollectionref, data));
