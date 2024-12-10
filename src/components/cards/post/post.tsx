@@ -1,4 +1,5 @@
 import Share from "@/components/shared/share/share";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { likePost, unlikePost } from "@/redux/post.redux";
 import { highlightHashtags } from "@/utils/paragraph.utils";
 import dayjs from "dayjs";
@@ -57,11 +58,11 @@ const Post = ({ postDetails }: iPostProps) => {
   return (
     <div className="px-3 py-2 bg-yellow-100 rounded-2xl mt-2 mb-4">
       <div className="flex gap-2 items-center">
-        <img
-          className="w-[40px] h-[40px] rounded-full "
-          src={`${postDetails?.userProfilePicture?.public_url}`}
-          alt=""
-        />
+        <Avatar className="w-[40px] h-[40px] rounded-full ">
+          <AvatarImage src={`${postDetails?.userProfilePicture?.public_url}`} />
+          <AvatarFallback>{userDetails?.name?.charAt(0)}</AvatarFallback>
+        </Avatar>
+
         <div className="flex flex-col justify-center">
           <h6 className="font-bold">{postDetails?.userName}</h6>
           <p className="opacity-40 text-sm">
