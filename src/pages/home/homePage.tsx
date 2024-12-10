@@ -62,7 +62,7 @@ const HomePage = () => {
         </div>
 
         {/* posts */}
-        <div>
+        <div className="h-[95%] overflow-scroll">
           {postArray?.map((item: any, idx: any) => (
             <Post postDetails={item} key={idx} />
           ))}

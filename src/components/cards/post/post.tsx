@@ -55,7 +55,7 @@ const Post = ({ postDetails }: iPostProps) => {
   };
 
   return (
-    <div className="px-3 py-2 bg-yellow-100 rounded-2xl">
+    <div className="px-3 py-2 bg-yellow-100 rounded-2xl mt-2 mb-4">
       <div className="flex gap-2 items-center">
         <img
           className="w-[40px] h-[40px] rounded-full "
@@ -77,7 +77,11 @@ const Post = ({ postDetails }: iPostProps) => {
               <img
                 onClick={() => setSelectedIndex(idx)}
                 className={`cursor-pointer h-full ${
-                  selectedIndex === idx ? "w-[70%]" : "w-[30%]"
+                  postDetails?.files?.length === 1
+                    ? "w-[100%]"
+                    : selectedIndex === idx
+                    ? "w-[70%]"
+                    : "w-[30%]"
                 } object-cover rounded-2xl transition-all duration-500 ease-in-out`}
                 src={`${item?.public_url}`}
                 alt={`post-${idx}-image`}
@@ -92,7 +96,11 @@ const Post = ({ postDetails }: iPostProps) => {
                 }}
                 ref={videoRef}
                 className={`cursor-pointer h-full ${
-                  selectedIndex === idx ? "w-[70%]" : "w-[30%]"
+                  postDetails?.files?.length === 1
+                    ? "w-[100%]"
+                    : selectedIndex === idx
+                    ? "w-[70%]"
+                    : "w-[30%]"
                 } object-cover rounded-2xl transition-all duration-500 ease-in-out`}
                 autoPlay
                 loop
