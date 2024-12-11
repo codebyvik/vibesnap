@@ -1,50 +1,87 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# VibeSnap
 
-Currently, two official plugins are available:
+VibeSnap is a cutting-edge social media application designed to provide a seamless and engaging user experience. Built with modern web technologies, it features intuitive user interactions, smooth infinite scrolling, and responsive design, making it ideal for users across devices.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+### User Authentication
+- Sign up and log in using email and password.
+- Google login integration.
+- Persistent sessions to keep users logged in.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Social Media Feed
+- Post text, images, and videos with ease.
+- Multi-image upload support for a single post.
+- Infinite scrolling for a continuous content experience.
+
+### User Profiles
+- Update personal details like bio, name, and profile picture.
+- "My Posts" section showcasing user-generated content.
+
+### Interactive Video Handling
+- Auto-play videos when in view and pause when out of view for better engagement.
+
+### Content Sharing
+- Share posts seamlessly across other platforms.
+
+### Responsive Design
+- Optimized for viewing on mobile, tablet, and desktop devices.
+
+
+## Tech Stack
+
+**Frontend:** React.js, Vite, Tailwind CSS
+
+**Backend:** Firebase (Authentication, Firestore)
+
+**State Management:** React
+
+## Prerequisites
+- Ensure Node.js is installed on your system.
+
+- Set up a Firebase project for backend functionalities
+## Installation
+
+Clone the repository:
+
+```bash
+ git clone https://github.com/codebyvik/vibesnap.git
+```
+    
+Navigate to the project directory:
+
+```bash
+cd vibesnap
+```
+Install dependencies:
+```bash
+npm install
+```
+Configure Firebase by creating a .env file in the root directory:
+```bash
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
+VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
+
+VITE_CLOUDINARY_CLOUD_NAME = your-cloudinary-name
+VITE_CLOUDINARY_UPLOAD_URL = your-cloudinary-upload-url
+VITE_CLOUDINARY_UPLOAD_PRESET= your-cloudinary-upload-preset
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Start the development server:
+```bash
+npm run dev
 ```
+## License
+
+This project is open-source and available under the [MIT](https://choosealicense.com/licenses/mit/) License.
+
+
+
