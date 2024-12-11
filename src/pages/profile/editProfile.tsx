@@ -18,7 +18,7 @@ const EditProfile = () => {
   const profilePicInputRef = useRef<HTMLInputElement | null>(null);
   const coverPicInputRef = useRef<HTMLInputElement | null>(null);
   const { toast } = useToast();
-  const { userDetails, success } = useSelector((state: any) => state?.auth?.user);
+  const { userDetails, success, isLoading } = useSelector((state: any) => state?.auth?.user);
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [bio, setBio] = useState<string>("");
@@ -39,7 +39,7 @@ const EditProfile = () => {
   useEffect(() => {
     if (success) {
       toast({
-        title: "Post success",
+        title: "Profile Updated",
       });
       setTimeout(() => {
         dispatch(fetchUserData());
@@ -207,10 +207,11 @@ const EditProfile = () => {
         </div>
       </div>
       <button
+        disabled={isLoading}
         onClick={handleSubmit}
         className="mb-5 flex items-center justify-center bg-bgDark text-white px-4 py-2 rounded-full shadow hover:bg-gray-800 focus:outline-none w-[300px] mx-auto"
       >
-        Update Profile
+        {isLoading ? "saving..." : "Save "}
       </button>
     </div>
   );
