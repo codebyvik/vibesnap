@@ -1,31 +1,31 @@
 import GoogleLogo from "../../assets/icons/google-logo.png";
 import LoginBg from "../../assets/background-images/login-bg.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/auth.redux";
 import Logo from "../../assets/icons/vibesnap-logo.svg";
-// import { useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { routeNames } from "../../routes/routes";
-// import { getLocalStorageItem } from "@/utils/localstorage";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { routeNames } from "../../routes/routes";
+import { getLocalStorageItem } from "@/utils/localstorage";
 
 const Login = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const { userDetails } = useSelector((state: any) => state.auth.user);
+  const { userDetails } = useSelector((state: any) => state.auth.user);
 
   const handleGoogleLogin = () => {
     dispatch(loginUser());
   };
 
-  // const signedIn = getLocalStorageItem("signedIn");
-  // useEffect(() => {
-  //   // if signedIn or if login is success navigate the user to home page
+  const signedIn = getLocalStorageItem("signedIn");
+  useEffect(() => {
+    // if signedIn or if login is success navigate the user to home page
 
-  //   if (userDetails) {
-  //     navigate(routeNames.homePage);
-  //   }
-  // }, [userDetails, signedIn]);
+    if (userDetails) {
+      navigate(routeNames.homePage);
+    }
+  }, [userDetails, signedIn]);
 
   return (
     <div className="flex justify-center items-center h-screen w-full ">
