@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-const CustomFileCarousel = ({ files }: any) => {
+const CustomFileCarousel = memo(({ files }: any) => {
   const [active, setActive] = useState<number>(0);
 
   const RenderFiles = ({ file }: any) => {
@@ -77,6 +77,6 @@ const CustomFileCarousel = ({ files }: any) => {
       </div>
     </div>
   );
-};
+});
 
 export default CustomFileCarousel;

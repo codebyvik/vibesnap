@@ -26,7 +26,7 @@ const HomePage = () => {
     if (!userDetails) {
       dispatch(fetchUserData());
     }
-    dispatch(fetchAllPosts({ lastVisible, pageSize: 20 }));
+    dispatch(fetchAllPosts({ lastVisible: 0, pageSize: 20 }));
   }, []);
 
   useEffect(() => {

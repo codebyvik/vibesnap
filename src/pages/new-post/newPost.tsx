@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { uploadPreset, uploadUrl } from "@/configs/cloudinary";
 import { useToast } from "@/hooks/use-toast";
 import { fetchUserData } from "@/redux/auth.redux";
-import { createPost } from "@/redux/post.redux";
+import { createPost, resetPostsState } from "@/redux/post.redux";
 import { routeNames } from "@/routes/routes";
 import { highlightHashtags } from "@/utils/paragraph.utils";
 import axios, { AxiosResponse } from "axios";
@@ -28,16 +28,20 @@ const NewPost = () => {
   const { userDetails } = useSelector((state: any) => state?.auth?.user);
   const { success } = useSelector((state: any) => state?.posts?.post);
 
+  const [uploading, setUploading] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
   useEffect(() => {
     if (success) {
+      setUploading(false);
       toast({
         title: "Post success",
       });
       setTimeout(() => {
+        dispatch(resetPostsState());
         navigate(routeNames.homePage);
       }, 1000);
     }
@@ -67,6 +71,7 @@ const NewPost = () => {
   };
 
   const handleCreatePosts = async () => {
+    setUploading(true);
     const filteredFiles = files?.map((item: any) => item?.file);
 
     const uploadedFiles: IuploadedFiles[] = [];
@@ -151,10 +156,11 @@ const NewPost = () => {
       </div>
 
       <button
+        disabled={uploading}
         onClick={handleCreatePosts}
         className="mb-5 flex items-center justify-center bg-bgDark text-white px-4 py-2 rounded-full shadow hover:bg-gray-800 focus:outline-none w-[300px] mx-auto"
       >
-        Create Post
+        {uploading ? "uploading..." : "Create Post "}
       </button>
     </div>
   );
