@@ -19,13 +19,13 @@ const Login = () => {
   };
 
   const signedIn = getLocalStorageItem("signedIn");
-  useEffect(() => {
-    // if signedIn or if login is success navigate the user to home page
+  // useEffect(() => {
+  //   // if signedIn or if login is success navigate the user to home page
 
-    if (userDetails) {
-      navigate(routeNames.homePage);
-    }
-  }, [userDetails, signedIn]);
+  //   if (userDetails) {
+  //     navigate(routeNames.homePage);
+  //   }
+  // }, [userDetails, signedIn]);
 
   return (
     <div className="flex justify-center items-center h-screen w-full ">
