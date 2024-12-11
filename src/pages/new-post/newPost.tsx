@@ -3,6 +3,7 @@ import PageHeader from "@/components/shared/pageHeader/pageHeader";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadPreset, uploadUrl } from "@/configs/cloudinary";
 import { useToast } from "@/hooks/use-toast";
+import { fetchUserData } from "@/redux/auth.redux";
 import { createPost } from "@/redux/post.redux";
 import { routeNames } from "@/routes/routes";
 import { highlightHashtags } from "@/utils/paragraph.utils";
@@ -41,6 +42,12 @@ const NewPost = () => {
       }, 1000);
     }
   }, [success]);
+
+  useEffect(() => {
+    if (!userDetails) {
+      dispatch(fetchUserData());
+    }
+  }, []);
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;

@@ -26,6 +26,10 @@ const EditProfile = () => {
   const [coverPic, setCoverPic] = useState<any>(null);
 
   useEffect(() => {
+    if (!userDetails) {
+      dispatch(fetchUserData());
+    }
+
     if (userDetails) {
       setName(userDetails?.name);
       setBio(userDetails?.bio);

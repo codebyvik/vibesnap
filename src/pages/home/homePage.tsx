@@ -10,6 +10,7 @@ import { routeNames } from "@/routes/routes";
 import Navbar from "@/layout/navbar";
 import Post from "@/components/cards/post/post";
 import { fetchAllPosts } from "@/redux/post.redux";
+import { fetchUserData } from "@/redux/auth.redux";
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,8 +23,11 @@ const HomePage = () => {
   const { postArray, hasMore, lastVisible } = useSelector((state: any) => state.posts.allPosts);
 
   useEffect(() => {
+    if (!userDetails) {
+      dispatch(fetchUserData());
+    }
     dispatch(fetchAllPosts({ lastVisible, pageSize: 2 }));
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (!showMessageStatus) {
